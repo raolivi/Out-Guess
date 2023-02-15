@@ -1,0 +1,136 @@
+Console.WriteLine("Welcome to OutGuess!"); 
+Console.WriteLine();
+
+bool User_Input = true;
+
+string User;
+int TW = 0;
+int TL = 0;
+int GP = 1;
+
+double TA = 0.0;
+Console.WriteLine("How much cash are you bringing to the table?");
+TA = double.Parse(Console.ReadLine());
+
+while (User_Input)
+{
+    double Wage = 0.0;
+    Console.WriteLine("How much do you want to wage?");
+    Wage = double.Parse(Console.ReadLine());
+    if (Wage > TA)
+    {
+        Console.WriteLine("Error. Please re-enter wage");
+        Wage = double.Parse(Console.ReadLine());
+    }
+
+    TA = TA - Wage;
+    if (TA <= 0)
+    {
+        User_Input = false;      
+    }
+
+    int GN = 0;
+    Console.WriteLine("Enter how many guesses you want: ");
+    GN = int.Parse(Console.ReadLine());
+
+    if (GN > 10)
+    {
+        Console.WriteLine("Error. Please enter a nubmer between 1 and 10");
+    }
+
+    Console.WriteLine("--------------------------------------------------------------");
+
+    int number = 0;
+    int guess = 0;
+    Console.WriteLine("I've chosen a secret number between 1 and 100. Now guess it!"); 
+    guess = int.Parse(Console.ReadLine());
+
+    //Prompts user to enter a number 
+
+    Random rnd_maker = new Random(); //Insert random number generator
+    number = rnd_maker.Next(1, 101); //Generates a number between 1 & 100
+                                   
+    for (int i = GN; i >= 1 ; i--)
+    {
+
+        if (guess < 1 || guess > 100)
+        {
+            Console.WriteLine("Error. Please enter a number between 1 and 100");
+            guess = int.Parse(Console.ReadLine());
+        }
+
+    }//End 1st for loop 
+
+    for (int i = GN; i >= 1 ; i--) //Sorts out numbers entered and says if they're correct, too high or too low
+    {
+        if (guess == number)
+        {
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("You win! The correct number was {0}!", number);
+            double Wins = Wage * i;
+            TW += 1;
+            Console.WriteLine("Your winnings are ${0}", Wins);
+            Console.WriteLine("Would you like to play again? Y or N");
+            User = Console.ReadLine();
+            if (User == "N")
+            {
+                User_Input = false;
+            }
+            else if (User == "Y")
+            {
+                GP += 1;
+            }
+        }
+
+        //Console displays a congragulatory message and stops program if user guesses the correct number
+    
+        if (i == 1)
+        {
+            Console.WriteLine("------------------------------------");
+            Console.WriteLine("You lose! The correct number was {0}", number);
+            Console.WriteLine("Would you like to play again? Y or N");
+            TL += 1;
+            User = Console.ReadLine();
+            if (User == "N")
+            {
+                User_Input = false; 
+            }
+            else if (User == "Y")
+            {
+                GP += 1;
+            }
+
+        }
+
+        //Console displays that the user lost the game and shows the correct number after 7 guesses
+
+        else if (guess > number) 
+        {
+            Console.WriteLine("Sorry, too high! You have {0} guess(es) remaining.", i - 1);
+            guess = int.Parse(Console.ReadLine());
+        }
+    
+        //Console displays the number was too high and shows how many guesses they have left
+        //Prompts user to enter another number 
+    
+        else if (guess < number)  
+        {
+            Console.WriteLine("Sorry, too low! You have {0} guess(es) remaining.", i - 1);
+            guess = int.Parse(Console.ReadLine());
+        } 
+
+        //Console displays the number was too low and shows how many guesses they have left
+        //Prompts user to enter another number
+    }
+
+
+}
+
+do
+{
+    Console.WriteLine("---------------------------");
+    double wpercent = (TW / GP) * 100;
+    Console.WriteLine("Your winning percentage: {0}%", Math.Round(wpercent, 2));
+    double lpercent = (TL / GP) * 100;
+    Console.WriteLine("Your losing percentage: {0}%", Math.Round(lpercent, 2));
+} while (User_Input = false);
